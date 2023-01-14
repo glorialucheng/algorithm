@@ -1,0 +1,77 @@
+问题1，求最大公约数
+    解法1，欧几里得算法
+    定理：两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数
+    时间复杂度O(log n)
+    伪代码：
+        int get_max_common_factor1(a, b):
+            mod = a % b
+            while mod != 0:
+                a = b
+                b = mod
+                mod = a % b
+            return b
+    运行10000次的时间：0.007996797561645508
+
+    解法2，蛮力法，循环求解
+    时间复杂度O(n)
+    伪代码：
+        int get_max_common_factor2(a, b):
+            s = a if a < b else b
+            while s > 0:
+                if a % s == 0 and b % s == 0:
+                    return s
+                s -= 1
+    运行10000次的时间：18.287710428237915
+
+    解法3，更相减损术
+    1，先判断两个数的大小，如果两数相等，则这个数本身就是就是它们的最大公约数。
+    2，如果不相等，则用大数减去小数，然后用这个较小数与它们相减的结果相比较，如果相等，则这个差就是它们的最大公约数，而如果不相等，则继续执行操作2。
+    时间复杂度O(n)
+    伪代码：
+        int get_max_common_factor3(a, b):
+            while a != b:
+                if a > b:
+                    a -= b
+                else:
+                    b -= a
+            return a
+    运行10000次的时间：0.012503385543823242
+
+    结论：不同算法之间在运行次数较少或者规模较小时，体现不出算法效率的差异性，当运行次数较大或者问题规模较大时，算法效率才能体现出来，如以上三个获取最大公约数的算法，在运行10000次时，算法2的运行时间远大于算法1和算法3
+
+
+问题2，生成前N个自然数的随机序列
+    解法1，蛮力法
+    暴力求解，逐个生成数字
+    如果生成的数字不在里面则填入，否则重新生成
+    时间复杂度：O(n^2)
+    伪代码：
+        void get_random_sequence1(n, arr):
+            for i in range(n):
+                while True:
+                    temp = randint(1, n)
+                    if temp not in arr:
+                        arr[i] = temp
+                        break
+
+    解法2，另外设置一个“标志”数组，用于记录数字是否已存在
+    时间复杂度：O(n^2)
+    伪代码：
+        void get_random_sequence2(n, arr):
+            flag = []
+            for i in range(n):
+                temp = randint(1, n)
+                while flag[temp - 1] == 1:
+                    temp = randint(1, n)
+                arr[i] = temp
+                flag[temp - 1] = 1
+
+    解法3，先生成1到n得顺序序列，将第i个数字与前面随机一个数字对调
+    时间复杂度：O(n)
+    伪代码：
+        void get_random_sequence3(n, arr):
+            for index in range(n):
+                temp = randint(0, index)
+                arr[index], arr[temp] = arr[temp], arr[index]
+
+    以上三个随机序列生成算法在生成长度为100、200、300...4900、5000的随机序列的时间变化图如图所示：https://imgloc.com/i/l761p
